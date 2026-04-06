@@ -36,7 +36,7 @@ confirmation_keyboard = InlineKeyboardMarkup(
 )
 
 cancel_keyboard = ReplyKeyboardMarkup(
-    keyboard=[KeyboardButton(text='❌ Отмена')],
+    keyboard=[[KeyboardButton(text='❌ Отмена')]],
     resize_keyboard=True,
     input_field_placeholder="Отмените, если передумали"
 )

@@ -20,6 +20,7 @@ router = Router()
 
 class GroupStates(StatesGroup):
     waiting_for_group = State()
+    waiting_for_message = State()
 
 
 def get_groups_dict_safe():
