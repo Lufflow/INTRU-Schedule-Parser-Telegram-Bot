@@ -13,7 +13,6 @@ from handlers import schedule_handlers as sh
 import logging
 import re
 
-# logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = Router()
@@ -181,8 +180,8 @@ async def show_week_schedule(message: types.Message, state: FSMContext):
 
         if result is None:
             text = (
-                "❌ Не удалось загрузить расписание.\n"
-                "Проверьте название группы или попробуйте позже."
+                "🤷‍♂️ Расписание отсутствует\n"
+                "Проверьте актуальную информацию на официальном сайте."
             )
             await safe_delete_message(loading_message)
             await message.answer(text)
@@ -192,7 +191,7 @@ async def show_week_schedule(message: types.Message, state: FSMContext):
 
         if not week_schedule_data:
             await safe_delete_message(loading_message)
-            await message.answer(f"❌ Для указанной группы расписание не найдено: <code>{group}</code>", parse_mode="HTML")
+            await message.answer(f"🤔 Для указанной группы расписание не найдено: <code>{group}</code>", parse_mode="HTML")
             return
 
         await safe_delete_message(loading_message)
@@ -245,8 +244,8 @@ async def show_day_schedule(message: types.Message, state: FSMContext):
 
         if result is None:
             text = (
-                "❌ Не удалось загрузить расписание.\n"
-                "Проверьте название группы или попробуйте позже."
+                "🤷‍♂️ Расписание отсутствует\n"
+                "Проверьте актуальную информацию на официальном сайте."
             )
             await safe_delete_message(loading_message)
             await message.answer(text)
@@ -256,7 +255,7 @@ async def show_day_schedule(message: types.Message, state: FSMContext):
 
         if not week_schedule_data:
             await safe_delete_message(loading_message)
-            await message.answer(f"❌ Для указанной группы расписание не найдено: <code>{group}</code>", parse_mode="HTML")
+            await message.answer(f"В этот день занятий нет!🎉", parse_mode="HTML")
             return
 
         logger.info(f"🔍 Ищем день: {day_number}")

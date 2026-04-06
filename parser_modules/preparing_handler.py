@@ -165,10 +165,9 @@ async def get_group_week_schedule(
             logger.error("❌ Не найден блок с расписанием")
             return None
 
-        # 🔹 Определяем тип недели
         parsed_week_type = 'odd' if 'full-odd-week' in week.get(
             'class', []) else 'even'
-        logger.info(f"📅 Спарсена неделя: {parsed_week_type}")
+        # logger.info(f"📅 Спарсена неделя: {parsed_week_type}")
 
         week_schedule_data = []
         days = week.find_all("h3", class_="day-heading")
@@ -192,7 +191,6 @@ async def get_group_week_schedule(
 
                 lesson_tails = []
 
-                # 🔹 Берём пары для этой недели + все недели
                 if parsed_week_type == 'odd':
                     lesson_tails = content.find_all(
                         "div", class_="class-odd-week")

@@ -11,7 +11,7 @@ async def start_message(message: types.Message):
 
     text = (
         f"<b>Добро пожаловать🎉,</b> {message.from_user.username}<b>!</b>\n\n"
-        "С помощью этого бота вы можете смотреть учебное расписание ИрНИТУ📚\n"
+        "С помощью этого бота вы можете смотреть учебное ИрНИТУ📚\n"
         "Введите точное название группы и смотрите расписание!📱\n"
     )
     await message.answer(text, parse_mode="HTML", reply_markup=menu_keyboard)

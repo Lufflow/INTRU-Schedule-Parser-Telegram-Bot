@@ -4,12 +4,10 @@ import sqlite3
 
 class Database:
     def __init__(self, db_file="users.db"):
-        """Инициализация базы данных"""
         self.db_file = db_file
         self._create_table()
 
     def _create_table(self):
-        """Создание таблицы, если её нет"""
         with sqlite3.connect(self.db_file) as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS users (
@@ -20,7 +18,6 @@ class Database:
             """)
 
     def save_user_group(self, user_id, group_name):
-        """Сохранить группу пользователя"""
         try:
             with sqlite3.connect(self.db_file) as conn:
                 conn.execute("""
@@ -33,7 +30,6 @@ class Database:
             return False
 
     def get_user_group(self, user_id):
-        """Получить группу пользователя"""
         try:
             with sqlite3.connect(self.db_file) as conn:
                 result = conn.execute(
@@ -46,3 +42,25 @@ class Database:
         except Exception as e:
             print(f"Ошибка получения: {e}")
             return None
+
+    def get_user_id_list(self):
+        try:
+            with sqlite3.connect(self.db_file) as conn:
+                result = conn.execute(
+                    "SELECT user_id FROM users"
+                ).fetchall()
+                if result:
+                    return [user_id[0] for user_id in result]
+                return []
+        except Exception as e:
+            print(f"Ошибка получения: {e}")
+            return None
+
+    def delete_user(self, user_id):
+        try:
+            with sqlite3.connect(self.db_file) as conn:
+                conn.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+            return True
+        except Exception as e:
+            print(f"Ошибка удаления: {e}")
+            return False
