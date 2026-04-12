@@ -4723,3 +4723,142 @@ NameError: name 'broadcast_status' is not defined. Did you mean: 'check_broadcas
 2026-04-06 19:50:06 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8701875832)
 2026-04-06 19:50:06 - asyncio - ERROR - Unclosed client session
 client_session: <aiohttp.client.ClientSession object at 0x000002013BA08190>
+2026-04-06 19:50:09 - logging_config - INFO - 🚀 Запуск бота...
+2026-04-06 19:50:09 - parser_modules.auto_update - INFO - 🔄 Начинаю обновление groups_dict...
+2026-04-06 19:50:09 - parser_modules.preparing_handler - INFO - 🔍 Начался процесс загрузки данных о группах...
+2026-04-06 19:50:09 - parser_modules.preparing_handler - INFO - 🌐 URL: https://www.istu.edu/schedule/?special=vikl
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO - 📚 Загружаем институты... (найдено 11 элементов)
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Аспирантура → https://www.istu.edu/schedule/?subdiv=664
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Байкальский институт БРИКС → https://www.istu.edu/schedule/?subdiv=685
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт авиамашиностроения и транспорта → https://www.istu.edu/schedule/?subdiv=1
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт архитектуры, строительства и дизайна → https://www.istu.edu/schedule/?subdiv=669
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт высоких технологий → https://www.istu.edu/schedule/?subdiv=671
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт заочно-вечернего обучения → https://www.istu.edu/schedule/?subdiv=680
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт информационных технологий и анализа данных → https://www.istu.edu/schedule/?subdiv=683
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт недропользования → https://www.istu.edu/schedule/?subdiv=4
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт "Сибирская школа геонаук (Siberian School of Geosciences)" → https://www.istu.edu/schedule/?subdiv=688
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт экономики, управления и права → https://www.istu.edu/schedule/?subdiv=144
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   🏛️ Институт энергетики → https://www.istu.edu/schedule/?subdiv=10
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO - 👥 Загружаем группы из 11 институтов...
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   [1/11] Обработка института: Аспирантура
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   [2/11] Обработка института: Байкальский институт БРИКС
+2026-04-06 19:50:12 - parser_modules.preparing_handler - INFO -   [3/11] Обработка института: Институт авиамашиностроения и транспорта
+2026-04-06 19:50:13 - parser_modules.preparing_handler - INFO -   [4/11] Обработка института: Институт архитектуры, строительства и дизайна
+2026-04-06 19:50:13 - parser_modules.preparing_handler - INFO -   [5/11] Обработка института: Институт высоких технологий
+2026-04-06 19:50:13 - parser_modules.preparing_handler - INFO -   [6/11] Обработка института: Институт заочно-вечернего обучения
+2026-04-06 19:50:14 - parser_modules.preparing_handler - INFO -   [7/11] Обработка института: Институт информационных технологий и анализа данных
+2026-04-06 19:50:15 - parser_modules.preparing_handler - INFO -   [8/11] Обработка института: Институт недропользования
+2026-04-06 19:50:15 - parser_modules.preparing_handler - INFO -   [9/11] Обработка института: Институт "Сибирская школа геонаук (Siberian School of Geosciences)"
+2026-04-06 19:50:16 - parser_modules.preparing_handler - INFO -   [10/11] Обработка института: Институт экономики, управления и права
+2026-04-06 19:50:16 - parser_modules.preparing_handler - INFO -   [11/11] Обработка института: Институт энергетики
+2026-04-06 19:50:16 - parser_modules.preparing_handler - INFO - ✅ Загрузка завершена! Всего групп: 850
+2026-04-06 19:50:16 - parser_modules.auto_update - INFO - ✅ groups_dict обновлён! Всего групп: 850
+2026-04-06 19:50:16 - parser_modules.auto_update - INFO - ⏳ Следующее обновление через 24 часов...
+2026-04-06 19:50:23 - handlers.basic_handlers - INFO - 📨 Запуск рассылки: 20 пользователей
+2026-04-06 19:50:23 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 638291236: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:23 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 826083815: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:24 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 854683629: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:24 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1075490108: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:25 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1088832418: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:26 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1096325607: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:26 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1110580759: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:26 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1143875815: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:26 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1145469568: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:27 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1172175112: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:27 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1375205288: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:27 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1494040565: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:27 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1546486888: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:28 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1614644563: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:28 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1712878402: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:28 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1787513657: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:28 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1848701842: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:29 - handlers.basic_handlers - WARNING - Не удалось отправить пользователю 1995277320: Telegram server says - Bad Request: chat not found
+2026-04-06 19:50:29 - handlers.basic_handlers - INFO - ✅ Рассылка завершена: 1/20 успешно
+2026-04-06 19:51:18 - handlers.basic_handlers - INFO - 📨 Запуск рассылки: 2 пользователей
+2026-04-06 19:51:18 - handlers.basic_handlers - INFO - ✅ Рассылка завершена: 1/2 успешно
+2026-04-06 19:58:15 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 19:58:15 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 19:58:16 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 19:58:16 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 19:58:16 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 19:58:16 - handlers.group_handlers - INFO - 🔍 Ищем день: 6
+2026-04-06 19:58:16 - handlers.group_handlers - INFO - ✅ Найдено по числу: 6
+2026-04-06 20:06:50 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-04-06 20:06:50 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8701875832)
+2026-04-06 20:09:24 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:09:24 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:09:25 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:09:25 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:09:25 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:09:31 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:09:31 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-13
+2026-04-06 20:09:33 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50273 символов
+2026-04-06 20:09:33 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:09:33 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:18:28 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы ИБб-24-1 пользователя 1282730970
+2026-04-06 20:18:33 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:18:33 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:18:34 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:18:34 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:18:34 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:23:26 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы ИБб-24-1 пользователя 766343313
+2026-04-06 20:23:30 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:23:30 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:23:32 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:23:32 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:23:32 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:24:30 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы Фмб-27-1 пользователя 1088832418
+2026-04-06 20:24:41 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы ИБб-22-1 пользователя 1088832418
+2026-04-06 20:25:04 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы Ибб-24-1 пользователя 1088832418
+2026-04-06 20:25:11 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы ИБб-24-1 пользователя 1088832418
+2026-04-06 20:25:20 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:25:20 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:25:21 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:25:21 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:25:21 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:26:19 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:26:19 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:26:20 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:26:20 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:26:20 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:26:20 - handlers.group_handlers - INFO - 🔍 Ищем день: 6
+2026-04-06 20:26:20 - handlers.group_handlers - INFO - ✅ Найдено по числу: 6
+2026-04-06 20:26:27 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:26:27 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:26:28 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:26:28 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:26:28 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:26:28 - handlers.group_handlers - INFO - 🔍 Ищем день: 7
+2026-04-06 20:26:28 - handlers.group_handlers - INFO - ✅ Найдено по числу: 7
+2026-04-06 20:26:35 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:26:35 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-13
+2026-04-06 20:26:36 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50273 символов
+2026-04-06 20:26:36 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:26:36 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:37:10 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы ИБб-24-1 пользователя 1172175112
+2026-04-06 20:37:14 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:37:14 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:37:15 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:37:16 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:37:16 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:37:16 - handlers.group_handlers - INFO - 🔍 Ищем день: 7
+2026-04-06 20:37:16 - handlers.group_handlers - INFO - ✅ Найдено по числу: 7
+2026-04-06 20:40:55 - handlers.group_handlers - INFO - 👨‍🎓 Сохранение группы ИБб-24-1 пользователя 1494040565
+2026-04-06 20:40:58 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:40:58 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:40:59 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:40:59 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:40:59 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:40:59 - handlers.group_handlers - INFO - 🔍 Ищем день: 6
+2026-04-06 20:40:59 - handlers.group_handlers - INFO - ✅ Найдено по числу: 6
+2026-04-06 20:41:18 - parser_modules.preparing_handler - INFO - 🔍 Запрос расписания для группы: ИБб-24-1
+2026-04-06 20:41:18 - parser_modules.preparing_handler - INFO - 🌐 URL запроса: https://www.istu.edu/schedule/?group=474032&date=2026-4-6
+2026-04-06 20:41:19 - parser_modules.preparing_handler - INFO - ✅ HTML получен, длина: 50260 символов
+2026-04-06 20:41:19 - parser_modules.preparing_handler - INFO - 📚 Найдено дней: 5
+2026-04-06 20:41:19 - parser_modules.preparing_handler - INFO - ✅ Расписание успешно спарсено: 5 дней
+2026-04-06 20:41:19 - handlers.group_handlers - INFO - 🔍 Ищем день: 7
+2026-04-06 20:41:19 - handlers.group_handlers - INFO - ✅ Найдено по числу: 7
+2026-04-06 21:32:09 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramNetworkError: HTTP Client says - ServerDisconnectedError: Server disconnected
+2026-04-06 21:32:09 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 8701875832)
+2026-04-06 21:32:09 - asyncio - ERROR - Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x000001BB5EF58190>
