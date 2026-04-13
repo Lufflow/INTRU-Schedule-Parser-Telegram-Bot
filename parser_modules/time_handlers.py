@@ -35,6 +35,6 @@ def get_lesson_end_time(time):
     if hours >= 24:
         hours -= 24
     if hours == 0:
-        hours == '00'
+        hours = '00'
 
     return f"{hours}:{minutes}"

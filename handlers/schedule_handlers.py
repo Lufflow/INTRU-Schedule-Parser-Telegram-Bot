@@ -45,7 +45,7 @@ def collect_day_data(day_data: dict):
 
                 if lesson.get('lesson_type'):
                     result += f" Тип занятия: <code>{lesson['lesson_type']}</code>\n"
-                elif lesson.get('lesson_type'):
+                else:
                     result += f" Тип занятия: <code>не указан</code>\n"
 
                 if lesson.get('teacher'):
