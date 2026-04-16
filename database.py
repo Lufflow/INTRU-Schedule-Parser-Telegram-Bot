@@ -1,5 +1,7 @@
-# database.py
 import sqlite3
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class Database:
@@ -16,6 +18,7 @@ class Database:
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             """)
+            conn.commit()
 
     def save_user_group(self, user_id, group_name):
         try:
@@ -24,9 +27,10 @@ class Database:
                     INSERT OR REPLACE INTO users (user_id, group_name)
                     VALUES (?, ?)
                 """, (user_id, group_name))
+                conn.commit()
             return True
         except Exception as e:
-            print(f"Ошибка сохранения: {e}")
+            logger.error(f"Ошибка сохранения: {e}")
             return False
 
     def get_user_group(self, user_id):
@@ -40,7 +44,7 @@ class Database:
                     return result[0]
                 return None
         except Exception as e:
-            print(f"Ошибка получения: {e}")
+            logger.error(f"Ошибка получения: {e}")
             return None
 
     def get_user_id_list(self):
@@ -53,14 +57,15 @@ class Database:
                     return [user_id[0] for user_id in result]
                 return []
         except Exception as e:
-            print(f"Ошибка получения: {e}")
-            return None
+            logger.error(f"Ошибка получения: {e}")
+            return []
 
     def delete_user(self, user_id):
         try:
             with sqlite3.connect(self.db_file) as conn:
                 conn.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+                conn.commit()
             return True
         except Exception as e:
-            print(f"Ошибка удаления: {e}")
+            logger.error(f"Ошибка удаления: {e}")
             return False

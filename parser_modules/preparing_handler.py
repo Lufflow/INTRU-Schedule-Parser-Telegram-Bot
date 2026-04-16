@@ -1,4 +1,3 @@
-# parser_modules/preparing_handler.py
 from bs4 import BeautifulSoup
 from parser_modules.async_request import requester
 from parser_modules.time_handlers import get_full_today_date
@@ -6,7 +5,6 @@ from typing import Optional, Dict, List, Tuple, Any
 import asyncio
 import logging
 
-# logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -167,7 +165,6 @@ async def get_group_week_schedule(
 
         parsed_week_type = 'odd' if 'full-odd-week' in week.get(
             'class', []) else 'even'
-        # logger.info(f"📅 Спарсена неделя: {parsed_week_type}")
 
         week_schedule_data = []
         days = week.find_all("h3", class_="day-heading")
