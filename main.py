@@ -1,6 +1,3 @@
-# main.py
-
-import logging
 import os
 import asyncio
 from aiogram.fsm.storage.memory import MemoryStorage
