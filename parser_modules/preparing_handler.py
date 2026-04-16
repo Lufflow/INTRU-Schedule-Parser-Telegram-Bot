@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 
 
 async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str, str]:
-    logger.info("🔍 Начался процесс загрузки данных о группах...")
-    logger.info(f"🌐 URL: {url}")
+    logger.info("Начался процесс загрузки данных о группах.")
+    logger.info(f"URL: {url}")
 
     html = await requester.get(url)
 
@@ -32,7 +32,7 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
         logger.warning("⚠️ Не найдены элементы <li> на странице институтов")
 
     institute_dict = {}
-    logger.info(f"📚 Загружаем институты... (найдено {len(content)} элементов)")
+    logger.info(f"Загрузка институтов... (найдено {len(content)} элементов)")
 
     for item in content:
         link_tag = item.find("a")
@@ -51,7 +51,7 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
             logger.info(f"  🏛️ {institute_name} → {full_url}")
 
     groups_dict = {}
-    logger.info(f"👥 Загружаем группы из {len(institute_dict)} институтов...")
+    logger.info(f"Загрузка групп из {len(institute_dict)} институтов.")
 
     for idx, (name, institute_link) in enumerate(institute_dict.items(), 1):
         logger.info(
@@ -105,7 +105,7 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
                 f"  ❌ Ошибка при обработке института {name}: {type(e).__name__} — {e}")
             continue
 
-    logger.info(f"✅ Загрузка завершена! Всего групп: {len(groups_dict)}")
+    logger.info(f"✅ Загрузка завершена. Всего групп: {len(groups_dict)}")
 
     return groups_dict
 
@@ -115,7 +115,7 @@ async def get_group_week_schedule(
     groups_dict: Dict[str, str],
     next_week: bool = False
 ) -> Optional[Tuple[Any, List[Dict]]]:
-    logger.info(f"🔍 Запрос расписания для группы: {found_group}")
+    logger.info(f"Запрос расписания для группы: {found_group}")
 
     if not found_group or found_group not in groups_dict:
         logger.error(f"❌ Группа {found_group} не найдена в groups_dict")
@@ -123,7 +123,7 @@ async def get_group_week_schedule(
 
     url = groups_dict[found_group].strip()
     logger.info(
-        f"🌐 URL запроса: {url + '&date=' + get_full_today_date(next_week)}")
+        f"URL запроса: {url + '&date=' + get_full_today_date(next_week)}")
 
     try:
         html = await requester.get(url + '&date=' + get_full_today_date(next_week))
@@ -170,7 +170,7 @@ async def get_group_week_schedule(
         days = week.find_all("h3", class_="day-heading")
         week_schedule = week.find_all("div", class_="class-lines")
 
-        logger.info(f"📚 Найдено дней: {len(week_schedule)}")
+        logger.info(f"Найдено дней: {len(week_schedule)}")
 
         for day_index, day in enumerate(week_schedule):
             day_name = days[day_index].text.strip() if day_index < len(
@@ -277,7 +277,8 @@ async def get_group_week_schedule(
         return alert_info, week_schedule_data
 
     except asyncio.TimeoutError:
-        logger.error(f"⏰ Timeout при загрузке расписания для {found_group}")
+        logger.error(
+            f"Превышено ожидание при загрузке расписания для {found_group}")
         return None
 
     except Exception as e:

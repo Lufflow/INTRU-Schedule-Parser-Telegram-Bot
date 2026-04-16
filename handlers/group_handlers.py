@@ -64,7 +64,7 @@ async def save_group(message: types.Message, state: FSMContext, db=None):
     user_id = message.from_user.id
     group_name = message.text.strip()
 
-    logger.info(f"👨‍🎓 Сохранение группы {group_name} пользователя {user_id}")
+    logger.info(f"Сохранение группы {group_name} пользователя {user_id}")
 
     db = message.bot.db
     current_dict = get_groups_dict_safe()
@@ -259,7 +259,7 @@ async def show_day_schedule(message: types.Message, state: FSMContext):
             await message.answer(f"В этот день занятий нет!🎉", parse_mode="HTML")
             return
 
-        logger.info(f"🔍 Ищем день: {day_number}")
+        logger.info(f"Ищем день: {day_number}")
 
         found = False
         day_data = None

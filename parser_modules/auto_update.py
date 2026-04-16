@@ -11,7 +11,7 @@ update_event = asyncio.Event()
 
 
 async def update_groups_dict():
-    logger.info("🔄 Начинаю обновление groups_dict...")
+    logger.info("Началось обновление groups_dict...")
 
     url = "https://www.istu.edu/schedule/?special=vikl"
     new_dict = await ph.get_groups_dict(url)
@@ -19,11 +19,11 @@ async def update_groups_dict():
     if new_dict:
         groups_dict.clear()
         groups_dict.update(new_dict)
-        logger.info(f"✅ groups_dict обновлён! Всего групп: {len(groups_dict)}")
+        logger.info(f"groups_dict обновлён. Всего групп: {len(groups_dict)}")
         update_event.set()
     else:
         logger.error(
-            "❌ Не удалось обновить groups_dict — используем старые данные")
+            "❌ Не удалось обновить groups_dict. Используются старые данные")
 
 
 async def auto_update_task(interval_hours: int = 24):
@@ -32,6 +32,6 @@ async def auto_update_task(interval_hours: int = 24):
     await update_groups_dict()
 
     while True:
-        logger.info(f"⏳ Следующее обновление через {interval_hours} часов...")
+        logger.info(f"Следующее обновление через {interval_hours} часов")
         await asyncio.sleep(interval_seconds)
         await update_groups_dict()

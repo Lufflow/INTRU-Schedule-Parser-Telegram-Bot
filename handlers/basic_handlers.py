@@ -113,7 +113,7 @@ async def run_background_broadcast(original_message, user_id_list):
     }
 
     logger.info(
-        f"📨 Запуск рассылки: {broadcast_status['total']} пользователей")
+        f"Запуск рассылки: {broadcast_status['total']} пользователей")
 
     for uid in user_id_list:
         if uid == ADMIN_ID:

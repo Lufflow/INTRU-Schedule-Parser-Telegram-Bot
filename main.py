@@ -25,7 +25,7 @@ logger = setup_logging()
 
 
 async def on_shutdown(bot: Bot, dp: Dispatcher):
-    logger.info("⏹️  Остановка бота...")
+    logger.info("Остановка бота...")
 
     try:
         await requester.close()
@@ -46,7 +46,7 @@ async def on_shutdown(bot: Bot, dp: Dispatcher):
 
 
 async def main():
-    logger.info("🚀 Запуск бота...")
+    logger.info("Запуск бота...")
 
     dp.shutdown.register(on_shutdown)
     dp.include_router(group_handlers.router)
@@ -62,4 +62,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except KeyboardInterrupt:
-        logger.warning("⚠️  Бот остановлен пользователем (Ctrl+C)")
+        logger.warning("Бот остановлен пользователем (Ctrl+C)")
