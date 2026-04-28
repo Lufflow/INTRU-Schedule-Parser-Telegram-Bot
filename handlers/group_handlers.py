@@ -95,7 +95,7 @@ async def show_my_group(message: types.Message, state: FSMContext):
     if group:
         await message.answer(f"📚 Ваша текущая группа: <code>{group}</code>", parse_mode="HTML")
     else:
-        await message.answer("❌ Группа не установлена. Используйте кнопку <code>📅 Получить расписание</code>")
+        await message.answer("❌ Группа не установлена. Используйте кнопку <code>📅 Получить расписание</code>", parse_mode='HTML')
 
 
 @router.message(Command("setgroup"))
@@ -249,7 +249,7 @@ async def show_day_schedule(message: types.Message, state: FSMContext):
                 "Проверьте актуальную информацию на официальном сайте."
             )
             await safe_delete_message(loading_message)
-            await message.answer(text)
+            await message.answer(text, parse_mode='HTML')
             return
 
         alert_info, week_schedule_data = result
@@ -275,7 +275,7 @@ async def show_day_schedule(message: types.Message, state: FSMContext):
 
         if not found:
             await safe_delete_message(loading_message)
-            await message.answer(f"В этот день занятий нет!🎉")
+            await message.answer(f"В этот день занятий нет!🎉", parse_mode='HTML')
             return
 
         await safe_delete_message(loading_message)

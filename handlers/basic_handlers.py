@@ -160,7 +160,7 @@ async def check_broadcast_status(message: types.Message):
             parse_mode="HTML"
         )
     else:
-        await message.answer("✅ Нет активной рассылки")
+        await message.answer("✅ Нет активной рассылки", parse_mode='HTML')
 
 
 @router.message(F.text & ~F.text.startswith("/"))
