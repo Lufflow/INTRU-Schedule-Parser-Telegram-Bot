@@ -185,9 +185,6 @@ __pycache__/
 pytest.ini
 requirements-test.txt
 
-Dockerfile*
-Dockerfile.dev
-Dockerfile.prod
-/Dockerfile
+
 .dockerignore
 Procfile
