@@ -20,6 +20,7 @@ if not TOKEN:
 db = Database("users.db")
 storage = MemoryStorage()
 bot = Bot(token=TOKEN)
+
 dp = Dispatcher(storage=storage)
 logger = setup_logging()
 
