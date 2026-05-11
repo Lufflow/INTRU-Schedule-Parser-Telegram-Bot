@@ -6,7 +6,6 @@ from parser_modules import preparing_handler as ph
 logger = logging.getLogger(__name__)
 
 groups_dict: Dict[str, str] = {}
-
 update_event = asyncio.Event()
 
 
@@ -23,7 +22,7 @@ async def update_groups_dict():
         update_event.set()
     else:
         logger.error(
-            "❌ Не удалось обновить groups_dict. Используются старые данные")
+            "Не удалось обновить groups_dict. Используются старые данные")
 
 
 async def auto_update_task(interval_hours: int = 24):
