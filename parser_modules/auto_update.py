@@ -12,7 +12,7 @@ update_event = asyncio.Event()
 async def update_groups_dict():
     logger.info("Началось обновление groups_dict...")
 
-    url = "https://www.istu.edu/schedule/?special=vikl"
+    url = "https://www.istu.edu/raspisanie/"
     new_dict = await ph.get_groups_dict(url)
 
     if new_dict:

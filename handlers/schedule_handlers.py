@@ -10,9 +10,11 @@ def collect_alert_info(alert_info, group):
     for item in alert_info:
         for name, data in item.items():
             if name.lower() == 'группа:':
-                result += f"<b>{name.capitalize()}</b> <code>{group}</code>\n"
+                result += f"<b>{name.capitalize()}</b>: <code>{group}</code>\n"
+            elif 'учебное подразделение:' in name.lower():
+                result += f"<b>{name.capitalize()}</b>:\n<code>{group}</code>\n"
             else:
-                result += f"<b>{name.capitalize()}</b> <code>{data.capitalize()}</code>\n"
+                result += f"<b>{name.capitalize()}</b>: <code>{data.capitalize()}</code>\n"
 
     return result
 

@@ -270,7 +270,7 @@ async def show_day_schedule(message: types.Message, state: FSMContext):
             if re.search(pattern, day_date):
                 day_data = day_object
                 found = True
-                logger.info(f"✅ Найдено по числу: {day_number}")
+                logger.info(f"Найдено по числу: {day_number}")
                 break
 
         if not found:

@@ -1,6 +1,9 @@
 import aiohttp
 import asyncio
+import logging
 from typing import Optional
+
+logger = logging.getLogger(__name__)
 
 
 class AsyncRequester:
@@ -20,7 +23,11 @@ class AsyncRequester:
                         "Connection": "keep-alive",
                         "DNT": "1",
                     },
-                    timeout=aiohttp.ClientTimeout(total=30),
+                    timeout=aiohttp.ClientTimeout(
+                        total=30,
+                        connect=15,
+                        sock_read=30,
+                        sock_connect=10),
                     connector=aiohttp.TCPConnector(
                         limit=10,
                         ttl_dns_cache=300,
@@ -49,6 +56,8 @@ class AsyncRequester:
                     return None
                 await asyncio.sleep(2 ** attempt)
 
+        logger.warning(
+            f"Не удалось получить {url} после {max_retries} попыток")
         return None
 
     async def close(self):

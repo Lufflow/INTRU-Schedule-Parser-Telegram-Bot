@@ -15,21 +15,22 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
     html = await requester.get(url)
 
     if html is None:
-        logger.error("❌ Не удалось загрузить главную страницу расписания")
+        logger.error("Не удалось загрузить главную страницу расписания")
         return {}
 
     main_page_html = BeautifulSoup(html, "html.parser")
 
-    content_div = main_page_html.find(
-        "div", class_=lambda c: c and "content" in c)
+    # НОВЫЙ СЕЛЕКТОР: список институтов
+    content_div = main_page_html.find("ul", class_="list-sublist")
 
     if not content_div:
-        logger.error("❌ Не найден блок class='content' на странице")
+        logger.error("Не найден блок class='list-sublist' на странице")
         return {}
 
-    content = content_div.find_all("li")
+    # НОВЫЙ СЕЛЕКТОР: элементы институтов
+    content = content_div.find_all("li", class_="multilist-item")
     if not content:
-        logger.warning("⚠️ Не найдены элементы <li> на странице институтов")
+        logger.warning("Не найдены элементы <li> на странице институтов")
 
     institute_dict = {}
     logger.info(f"Загрузка институтов... (найдено {len(content)} элементов)")
@@ -40,15 +41,14 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
             institute_name = link_tag.text.strip()
             institute_href = link_tag.get("href").strip()
 
+            # УПРОЩЁННОЕ ФОРМИРОВАНИЕ URL
             if institute_href.startswith("http"):
                 full_url = institute_href
-            elif institute_href.startswith("?"):
-                full_url = "https://www.istu.edu/schedule/" + institute_href
             else:
-                full_url = "https://www.istu.edu/schedule/" + institute_href
+                full_url = "https://www.istu.edu" + institute_href
 
             institute_dict[institute_name] = full_url
-            logger.info(f"  🏛️ {institute_name} → {full_url}")
+            logger.info(f"{institute_name} → {full_url}")
 
     groups_dict = {}
     logger.info(f"Загрузка групп из {len(institute_dict)} институтов.")
@@ -60,52 +60,42 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
             html = await requester.get(institute_link)
             if html is None:
                 logger.warning(
-                    f"  ⚠️ Не удалось загрузить страницу института: {name}")
+                    f"Не удалось загрузить страницу института: {name}")
                 continue
 
             groups_list_page = BeautifulSoup(html, "html.parser")
-            content_div = groups_list_page.find(
-                "div", class_=lambda c: c and "content" in c)
-            if not content_div:
+
+            # НОВЫЙ СЕЛЕКТОР: контейнер списка групп
+            schd_grp_list = groups_list_page.find(
+                "div", class_="schd-grp-list")
+            if not schd_grp_list:
                 logger.warning(
-                    f"  ⚠️ Нет блока 'content' на странице института {name}")
+                    f"Нет блока 'schd-grp-list' на странице института {name}")
                 continue
 
-            kurs_list = content_div.find(
-                "ul", class_=lambda c: c and "kurs-list" in c)
+            # НОВЫЙ СЕЛЕКТОР: элементы групп (независимо от курса)
+            group_items = schd_grp_list.find_all("div", class_="schd-grp-item")
 
-            if not kurs_list:
-                kurs_list = content_div.find("ul")
+            for item in group_items:
+                link_tag = item.find("a")
+                if link_tag and link_tag.get("href"):
+                    group_name = link_tag.text.strip()
+                    group_href = link_tag.get("href").strip()
 
-            if not kurs_list:
-                logger.warning(
-                    f"  ⚠️ Нет списка групп на странице института {name}")
-                continue
+                    # УПРОЩЁННОЕ ФОРМИРОВАНИЕ URL
+                    if group_href.startswith("http"):
+                        full_url = group_href
+                    else:
+                        full_url = "https://www.istu.edu" + group_href
 
-            groups = kurs_list.find_all("ul")
-            for item in groups:
-                links = item.find_all("li")
-                for a in links:
-                    link_tag = a.find("a")
-                    if link_tag and link_tag.get("href"):
-                        group_name = link_tag.text.strip()
-                        group_href = link_tag.get("href").strip()
-
-                        if group_href.startswith("http"):
-                            full_url = group_href
-                        elif group_href.startswith("?"):
-                            full_url = "https://www.istu.edu/schedule/" + group_href
-                        else:
-                            full_url = "https://www.istu.edu/schedule/" + group_href
-
-                        groups_dict[group_name] = full_url
+                    groups_dict[group_name] = full_url
 
         except Exception as e:
             logger.error(
-                f"  ❌ Ошибка при обработке института {name}: {type(e).__name__} — {e}")
+                f"Ошибка при обработке института {name}: {type(e).__name__} — {e}")
             continue
 
-    logger.info(f"✅ Загрузка завершена. Всего групп: {len(groups_dict)}")
+    logger.info(f"Загрузка завершена. Всего групп: {len(groups_dict)}")
 
     return groups_dict
 
@@ -118,148 +108,168 @@ async def get_group_week_schedule(
     logger.info(f"Запрос расписания для группы: {found_group}")
 
     if not found_group or found_group not in groups_dict:
-        logger.error(f"❌ Группа {found_group} не найдена в groups_dict")
+        logger.error(f"Группа {found_group} не найдена в groups_dict")
         return None
 
-    url = groups_dict[found_group].strip()
-    logger.info(
-        f"URL запроса: {url + '&date=' + get_full_today_date(next_week)}")
+    base_url = groups_dict[found_group].strip()
+    # Убираем возможный '?' в конце базового URL
+    if base_url.endswith('?'):
+        base_url = base_url[:-1]
+
+    # НОВЫЙ ФОРМАТ URL С ДАТОЙ: /15.05.2026/
+    date_str = get_full_today_date(next_week)
+    request_url = f"{base_url}/{date_str}/"
+    logging.info(f"Обращение по ссылке {request_url}")
+
+    logger.info(f"URL запроса: {request_url}")
 
     try:
-        html = await requester.get(url + '&date=' + get_full_today_date(next_week))
+        html = await requester.get(request_url)
 
         if html is None:
-            logger.error("❌ requester.get() вернул None — запрос не удался")
+            logger.warning(f"Первая попытка не удалась, повтор через 3 сек...")
+            await asyncio.sleep(3)
+            html = await requester.get(request_url)
+
+        if html is None:
+            logger.error("requester.get() вернул None после повторной попытки")
             return None
 
-        logger.info(f"✅ HTML получен, длина: {len(html)} символов")
+        logger.info(f"HTML получен, длина: {len(html)} символов")
 
         schedule_page_html = BeautifulSoup(html, "html.parser")
 
-        content_div = schedule_page_html.find(
-            "div", class_=lambda c: c and "content" in c)
-        if not content_div:
-            logger.error("❌ Не найден блок class='content'")
-            return None
-
-        alert_div = content_div.find("div", class_="alert-info")
-        alert_content = alert_div.find_all("p") if alert_div else []
-
+        # НОВЫЙ СЕЛЕКТОР: блок предупреждений (разделён на два блока)
         alert_info = []
-        for item in alert_content[:-2]:
-            name_and_data = item.contents
-            name = name_and_data[0].strip()
-            data_tag = name_and_data[1]
-            data = data_tag.text.capitalize() if hasattr(
-                data_tag, 'text') else str(data_tag)
-            alert_info.append({name: data})
+        info_blocks = schedule_page_html.find_all(
+            "div", class_="schedule-info-block")
+        for block in info_blocks:
+            items = block.find_all("div", class_="info-block-item")
+            for item in items:
+                label_div = item.find("div", class_="info-block-item-label")
+                value_div = item.find("div", class_="info-block-item-value")
+                if label_div and value_div:
+                    label = label_div.text.strip().rstrip(":")
+                    value = value_div.text.strip()
+                    alert_info.append({label: value})
 
-        odd_week = schedule_page_html.find("div", class_="full-odd-week")
-        even_week = schedule_page_html.find("div", class_="full-even-week")
-
-        week = odd_week if odd_week else even_week
-
-        if not week:
-            logger.error("❌ Не найден блок с расписанием")
+        # НОВЫЙ СЕЛЕКТОР: контейнер недели
+        week_container = schedule_page_html.find(
+            "div", class_=lambda c: c and "sch-list-week" in c)
+        if not week_container:
+            logger.error("Не найден блок class='sch-list-week'")
             return None
 
-        parsed_week_type = 'odd' if 'full-odd-week' in week.get(
+        # Определяем тип недели по классу контейнера
+        parsed_week_type = 'odd' if 'sch-list-week-odd' in week_container.get(
             'class', []) else 'even'
 
         week_schedule_data = []
-        days = week.find_all("h3", class_="day-heading")
-        week_schedule = week.find_all("div", class_="class-lines")
+        # НОВЫЙ СЕЛЕКТОР: контейнеры дней
+        day_containers = week_container.find_all("div", class_="sch-list-day")
 
-        logger.info(f"Найдено дней: {len(week_schedule)}")
+        for day_container in day_containers:
+            # Заголовок дня
+            day_header = day_container.find("h2", class_="sch-list-day-header")
+            day_name = day_header.text.strip() if day_header else "День"
 
-        for day_index, day in enumerate(week_schedule):
-            day_name = days[day_index].text.strip() if day_index < len(
-                days) else f"День {day_index + 1}"
-            day_schedule = day.find_all("div", class_="class-line-item")
+            # Находим все занятия в дне
+            lesson_items = day_container.find_all(
+                "div", class_="sch-list-item")
             day_time_slots = {}
 
-            for lesson in day_schedule:
-                content = lesson.find("div", class_="class-tails")
-                if not content:
-                    continue
+            for lesson_item in lesson_items:
+                # Время занятия
+                time_div = lesson_item.find(
+                    "div", class_="sch-list-item-time-inner")
+                lesson_time = time_div.text.strip() if time_div else "Время не указано"
 
-                lesson_time_div = content.find("div", class_="class-time")
-                lesson_time = lesson_time_div.text if lesson_time_div else "Время не указано"
-
-                lesson_tails = []
-
+                # Определяем блок недели (все/чётная/нечётная)
                 if parsed_week_type == 'odd':
-                    lesson_tails = content.find_all(
-                        "div", class_="class-odd-week")
-                    lesson_tails.extend(content.find_all(
-                        "div", class_="class-all-week"))
+                    week_block = lesson_item.find("div", class_="week-odd")
+                    if not week_block:
+                        week_block = lesson_item.find("div", class_="week-all")
                 else:
-                    lesson_tails = content.find_all(
-                        "div", class_="class-even-week")
-                    lesson_tails.extend(content.find_all(
-                        "div", class_="class-all-week"))
+                    week_block = lesson_item.find("div", class_="week-even")
+                    if not week_block:
+                        week_block = lesson_item.find("div", class_="week-all")
 
-                if not lesson_tails:
+                if not week_block:
                     continue
+
+                # Находим карточки занятий внутри блока недели
+                lesson_cards = week_block.find_all("div", class_="schcls-item")
 
                 if lesson_time not in day_time_slots:
                     day_time_slots[lesson_time] = {}
 
                 lesson_index = len(day_time_slots[lesson_time])
 
-                for lesson_tail in lesson_tails:
-                    if "свободно" in lesson_tail.text.lower():
-                        day_time_slots[lesson_time][lesson_index] = {
-                            'type': 'free'}
+                for card in lesson_cards:
+                    info_div = card.find("div", class_="schcls-item-info")
+                    if not info_div:
                         continue
 
-                    lesson_name_div = lesson_tail.find(
-                        "div", class_="class-pred")
-                    lesson_name = lesson_name_div.text if lesson_name_div else "Предмет не указан"
+                    # Название предмета
+                    name_div = info_div.find("div", class_="schcls-item-name")
+                    lesson_name = name_div.text.strip() if name_div else "Предмет не указан"
 
-                    lesson_info = lesson_tail.find_all(
-                        "div", class_="class-info")
+                    # Тип занятия (по классу)
+                    type_div = info_div.find(
+                        "div", class_="schcls-item-distype")
                     lesson_type = ""
-                    lesson_teachers = []
+                    if type_div:
+                        type_class = type_div.get('class', [])
+                        if 'type-1' in type_class:
+                            lesson_type = "лекция"
+                        elif 'type-2' in type_class:
+                            lesson_type = "практика"
+                        elif 'type-3' in type_class:
+                            lesson_type = "лабораторная работа"
+                        else:
+                            lesson_type = type_div.text.strip()
 
-                    if len(lesson_info) > 0:
-                        lesson_type_and_teacher = lesson_info[0].contents
-                        if len(lesson_type_and_teacher) > 0:
-                            lesson_type = lesson_type_and_teacher[0].strip(
-                            ) if lesson_type_and_teacher[0] else ""
-                        if len(lesson_type_and_teacher) > 1:
-                            for elem in lesson_type_and_teacher[1:]:
-                                if hasattr(elem, 'name') and elem.name == 'a':
-                                    lesson_teachers.append(elem.text)
+                    # Преподаватель
+                    teachers = []
+                    prepod_div = info_div.find(
+                        "div", class_="schcls-item-prepod")
+                    if prepod_div:
+                        for link in prepod_div.find_all("a"):
+                            teachers.append(link.text.strip())
 
+                    # Группа и подгруппа
                     groups = []
                     subgroup = ""
-                    groups_list = lesson_info[1].contents if len(
-                        lesson_info) > 1 else []
+                    group_div = info_div.find(
+                        "div", class_="schcls-item-group")
+                    if group_div:
+                        for link in group_div.find_all("a"):
+                            groups.append(link.text.strip())
+                        # Подгруппа может быть текстом после ссылки
+                        group_text = group_div.get_text(
+                            separator=' ', strip=True)
+                        if "подгруппа" in group_text.lower():
+                            parts = group_text.split("подгруппа")
+                            if len(parts) > 1:
+                                subgroup = "подгруппа " + parts[1].strip()
 
-                    if "подгруппа" in ''.join(str(item) for item in groups_list):
-                        for item in groups_list:
-                            if hasattr(item, 'name') and item.name == 'a':
-                                groups.append(item.text.strip())
-                            elif isinstance(item, str) and item.strip():
-                                subgroup = item.strip()
-                    else:
-                        for item in groups_list:
-                            if hasattr(item, 'name') and item.name == 'a':
-                                groups.append(item.text.strip())
-
-                    if len(groups) > 1:
-                        subgroup = ""
-
-                    lesson_aud_div = lesson_tail.find(
-                        "div", class_="class-aud")
-                    lesson_aud = lesson_aud_div.text if lesson_aud_div else "Аудитория не указана"
+                    # Аудитория
+                    aud_div = card.find("div", class_="schcls-item-aud")
+                    lesson_aud = ""
+                    if aud_div:
+                        link = aud_div.find("a")
+                        if link:
+                            lesson_aud = link.text.strip()
+                        else:
+                            lesson_aud = aud_div.text.strip()
+                    if not lesson_aud or lesson_aud == "-":
+                        lesson_aud = "Аудитория не указана"
 
                     day_time_slots[lesson_time][lesson_index] = {
                         'type': 'lesson',
                         'name': lesson_name,
                         'lesson_type': lesson_type,
-                        'teacher': lesson_teachers,
+                        'teacher': teachers,
                         'groups': groups,
                         'subgroup': subgroup,
                         'audience': lesson_aud
@@ -273,7 +283,7 @@ async def get_group_week_schedule(
                 })
 
         logger.info(
-            f"✅ Расписание успешно спарсено: {len(week_schedule_data)} дней")
+            f"Расписание успешно спарсено: {len(week_schedule_data)} дней")
         return alert_info, week_schedule_data
 
     except asyncio.TimeoutError:
@@ -283,7 +293,7 @@ async def get_group_week_schedule(
 
     except Exception as e:
         logger.error(
-            f"❌ Ошибка при парсинге расписания для {found_group}: {type(e).__name__} — {e}")
+            f"Ошибка при парсинге расписания для {found_group}: {type(e).__name__} — {e}")
         import traceback
         logger.error(traceback.format_exc())
         return None

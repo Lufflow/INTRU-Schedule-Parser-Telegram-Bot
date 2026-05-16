@@ -15,7 +15,7 @@ def get_full_today_date(next_week: bool = False):
     else:
         target_date = datetime.today()
 
-    return f"{target_date.year}-{target_date.month}-{target_date.day}"
+    return f"{target_date.day:02d}.{target_date.month:02d}.{target_date.year}"
 
 
 def get_tomorrow_date():

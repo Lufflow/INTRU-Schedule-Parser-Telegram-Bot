@@ -1,7 +1,10 @@
 import sqlite3
 import logging
+import os
 
 logger = logging.getLogger(__name__)
+
+DB_PATH = os.getenv("DB_PATH", "users.db")
 
 
 class Database:

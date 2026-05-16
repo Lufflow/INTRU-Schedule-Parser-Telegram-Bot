@@ -1,14 +1,19 @@
 from aiogram import Router, types, F
 from aiogram.filters.command import Command
 from aiogram.fsm.context import FSMContext
+from aiogram.exceptions import TelegramForbiddenError, TelegramAPIError
 from keyboards.menu_keyboard import menu_keyboard, cancel_keyboard
 from handlers.group_handlers import GroupStates
+from dotenv import load_dotenv
+import os
 import asyncio
 import logging
 
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 router = Router()
-ADMIN_ID = 1009981853
+ADMIN_ID = os.getenv("ADMIN_ID")
 
 broadcast_status = {
     'in_progress': False,
@@ -41,6 +46,40 @@ async def get_bot_info(message: types.Message):
         "https://www.istu.edu/schedule/"
     )
     await message.answer(text, parse_mode="HTML", reply_markup=menu_keyboard)
+
+
+@router.message(Command("number_of_users"))
+async def get_number_of_users(message: types.Message, db=None):
+    db = message.bot.db
+
+    if message.from_user.id != ADMIN_ID:
+        await message.answer(
+            "❌ У вас нет прав для этой команды",
+            reply_markup=menu_keyboard
+        )
+        return
+
+    user_id_list = db.get_user_id_list()
+
+    if user_id_list is None:
+        await message.answer(
+            "⚠️ Не удалось получить данные о пользователях",
+            reply_markup=menu_keyboard
+        )
+        return
+
+    total_users = len(user_id_list)
+
+    await message.answer(
+        f"📊 <b>Статистика пользователей</b>\n\n"
+        f"👥 Всего пользователей: <b>{total_users}</b>\n"
+        f"📅 Данные актуальны на момент запроса",
+        parse_mode="HTML",
+        reply_markup=menu_keyboard
+    )
+
+    logger.info(
+        f"Администратор {message.from_user.id} запросил статистику: {total_users} пользователей")
 
 
 @router.message(Command("send_message"))
@@ -95,11 +134,11 @@ async def process_broadcast(message: types.Message, state: FSMContext):
     )
 
     asyncio.create_task(
-        run_background_broadcast(message, user_id_list)
+        run_background_broadcast(message, user_id_list, db)
     )
 
 
-async def run_background_broadcast(original_message, user_id_list):
+async def run_background_broadcast(original_message, user_id_list, db):
     """
     Фоновая задача: отправляет сообщение всем пользователям
     """
@@ -122,6 +161,23 @@ async def run_background_broadcast(original_message, user_id_list):
         try:
             await original_message.copy_to(chat_id=uid)
             broadcast_status['sent'] += 1
+
+        except TelegramForbiddenError:
+            logger.warning(
+                f"Пользователь {uid} заблокировал бота. Удаляю из базы данных...")
+            try:
+                db.delete_user(uid)
+                logger.info(f"Пользователь {uid} удалён из базы данных")
+            except Exception as db_err:
+                logger.error(
+                    f"Ошибка при удалении пользователя {uid} из БД: {db_err}")
+            broadcast_status['failed'] += 1
+
+        except TelegramAPIError as e:
+            logger.warning(
+                f"Ошибка API для пользователя {uid}: {type(e).__name__}: {e}")
+            broadcast_status['failed'] += 1
+
         except Exception as e:
             logger.warning(f"Не удалось отправить пользователю {uid}: {e}")
             broadcast_status['failed'] += 1
@@ -140,7 +196,7 @@ async def run_background_broadcast(original_message, user_id_list):
     )
 
     logger.info(
-        f"✅ Рассылка завершена: "
+        f"Рассылка завершена: "
         f"{broadcast_status['sent']}/{broadcast_status['total']} успешно"
     )
 
