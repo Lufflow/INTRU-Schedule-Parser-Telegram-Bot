@@ -189,3 +189,4 @@ requirements-test.txt
 .dockerignore
 Procfile
 test_network.py
+data/
