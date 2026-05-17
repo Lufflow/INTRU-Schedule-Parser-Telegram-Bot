@@ -8,7 +8,7 @@ DB_PATH = os.getenv("DB_PATH", "users.db")
 
 
 class Database:
-    def __init__(self, db_file="users.db"):
+    def __init__(self, db_file=DB_PATH):
         self.db_file = db_file
         self._create_table()
 
