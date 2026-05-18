@@ -17,7 +17,7 @@ if not TOKEN:
     raise ValueError("Токен не найден. Проверь .env файл")
 
 
-db = Database("users.db")
+db = Database()
 storage = MemoryStorage()
 bot = Bot(token=TOKEN)
 

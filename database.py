@@ -9,10 +9,13 @@ DB_PATH = os.getenv("DB_PATH", "users.db")
 
 class Database:
     def __init__(self, db_file=DB_PATH):
-        self.db_file = db_file
+        self.db_file = db_file or os.getenv("DB_PATH", "users.db")
+        logger.info(f"Инициализация БД. Путь: {self.db_file}")
+        logger.info(f"Рабочая директория процесса: {os.getcwd()}")
         self._create_table()
 
     def _create_table(self):
+        os.makedirs(os.path.dirname(self.db_file) or '.', exist_ok=True)
         with sqlite3.connect(self.db_file) as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS users (
