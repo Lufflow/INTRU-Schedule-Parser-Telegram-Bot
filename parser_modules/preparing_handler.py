@@ -111,16 +111,11 @@ async def get_group_week_schedule(
         logger.error(f"Группа {found_group} не найдена в groups_dict")
         return None
 
-    base_url = groups_dict[found_group].strip()
-    # Убираем возможный '?' в конце базового URL
-    if base_url.endswith('?'):
-        base_url = base_url[:-1]
-
-    # НОВЫЙ ФОРМАТ URL С ДАТОЙ: /15.05.2026/
+    base_url = groups_dict[found_group].strip().rstrip('/?')
     date_str = get_full_today_date(next_week)
     request_url = f"{base_url}/{date_str}/"
-    logging.info(f"Обращение по ссылке {request_url}")
 
+    logger.info(f"Обращение по ссылке {request_url}")
     logger.info(f"URL запроса: {request_url}")
 
     try:
