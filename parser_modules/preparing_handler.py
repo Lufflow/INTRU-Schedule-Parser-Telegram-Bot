@@ -241,7 +241,7 @@ async def get_group_week_schedule(
                         lesson_aud = "Аудитория не указана"
 
                     day_time_slots[lesson_time][lesson_index] = {
-                        'type': 'lesson',
+                        'type': lesson_type,
                         'name': lesson_name,
                         'lesson_type': lesson_type,
                         'teacher': teachers,
