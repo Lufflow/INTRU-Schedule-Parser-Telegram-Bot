@@ -187,8 +187,20 @@ async def get_group_week_schedule(
 
                 for card in lesson_cards:
                     info_div = card.find("div", class_="schcls-item-info")
+
                     if not info_div:
-                        type_of_day = 'free'
+                        day_time_slots[lesson_time][lesson_index] = {
+                            'type': 'free',
+                            'name': 'Свободная пара',
+                            'lesson_type': '',
+                            'teacher': [],
+                            'groups': [],
+                            'subgroup': '',
+                            'audience': '-'
+                        }
+                        lesson_index += 1
+                        continue
+
                     type_of_day = 'lesson'
 
                     name_div = info_div.find("div", class_="schcls-item-name")
