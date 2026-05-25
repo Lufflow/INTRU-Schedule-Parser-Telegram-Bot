@@ -20,14 +20,12 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
 
     main_page_html = BeautifulSoup(html, "html.parser")
 
-    # НОВЫЙ СЕЛЕКТОР: список институтов
     content_div = main_page_html.find("ul", class_="list-sublist")
 
     if not content_div:
         logger.error("Не найден блок class='list-sublist' на странице")
         return {}
 
-    # НОВЫЙ СЕЛЕКТОР: элементы институтов
     content = content_div.find_all("li", class_="multilist-item")
     if not content:
         logger.warning("Не найдены элементы <li> на странице институтов")
@@ -41,7 +39,6 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
             institute_name = link_tag.text.strip()
             institute_href = link_tag.get("href").strip()
 
-            # УПРОЩЁННОЕ ФОРМИРОВАНИЕ URL
             if institute_href.startswith("http"):
                 full_url = institute_href
             else:
@@ -65,7 +62,6 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
 
             groups_list_page = BeautifulSoup(html, "html.parser")
 
-            # НОВЫЙ СЕЛЕКТОР: контейнер списка групп
             schd_grp_list = groups_list_page.find(
                 "div", class_="schd-grp-list")
             if not schd_grp_list:
@@ -73,7 +69,6 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
                     f"Нет блока 'schd-grp-list' на странице института {name}")
                 continue
 
-            # НОВЫЙ СЕЛЕКТОР: элементы групп (независимо от курса)
             group_items = schd_grp_list.find_all("div", class_="schd-grp-item")
 
             for item in group_items:
@@ -82,7 +77,6 @@ async def get_groups_dict(url: str, headers: Optional[Dict] = None) -> Dict[str,
                     group_name = link_tag.text.strip()
                     group_href = link_tag.get("href").strip()
 
-                    # УПРОЩЁННОЕ ФОРМИРОВАНИЕ URL
                     if group_href.startswith("http"):
                         full_url = group_href
                     else:
@@ -134,7 +128,6 @@ async def get_group_week_schedule(
 
         schedule_page_html = BeautifulSoup(html, "html.parser")
 
-        # НОВЫЙ СЕЛЕКТОР: блок предупреждений (разделён на два блока)
         alert_info = []
         info_blocks = schedule_page_html.find_all(
             "div", class_="schedule-info-block")
@@ -148,38 +141,31 @@ async def get_group_week_schedule(
                     value = value_div.text.strip()
                     alert_info.append({label: value})
 
-        # НОВЫЙ СЕЛЕКТОР: контейнер недели
         week_container = schedule_page_html.find(
             "div", class_=lambda c: c and "sch-list-week" in c)
         if not week_container:
             logger.error("Не найден блок class='sch-list-week'")
             return None
 
-        # Определяем тип недели по классу контейнера
         parsed_week_type = 'odd' if 'sch-list-week-odd' in week_container.get(
             'class', []) else 'even'
 
         week_schedule_data = []
-        # НОВЫЙ СЕЛЕКТОР: контейнеры дней
         day_containers = week_container.find_all("div", class_="sch-list-day")
 
         for day_container in day_containers:
-            # Заголовок дня
             day_header = day_container.find("h2", class_="sch-list-day-header")
             day_name = day_header.text.strip() if day_header else "День"
 
-            # Находим все занятия в дне
             lesson_items = day_container.find_all(
                 "div", class_="sch-list-item")
             day_time_slots = {}
 
             for lesson_item in lesson_items:
-                # Время занятия
                 time_div = lesson_item.find(
                     "div", class_="sch-list-item-time-inner")
                 lesson_time = time_div.text.strip() if time_div else "Время не указано"
 
-                # Определяем блок недели (все/чётная/нечётная)
                 if parsed_week_type == 'odd':
                     week_block = lesson_item.find("div", class_="week-odd")
                     if not week_block:
@@ -192,7 +178,6 @@ async def get_group_week_schedule(
                 if not week_block:
                     continue
 
-                # Находим карточки занятий внутри блока недели
                 lesson_cards = week_block.find_all("div", class_="schcls-item")
 
                 if lesson_time not in day_time_slots:
@@ -203,13 +188,12 @@ async def get_group_week_schedule(
                 for card in lesson_cards:
                     info_div = card.find("div", class_="schcls-item-info")
                     if not info_div:
-                        continue
+                        lesson_type = 'free'
+                    lesson_type = 'lesson'
 
-                    # Название предмета
                     name_div = info_div.find("div", class_="schcls-item-name")
                     lesson_name = name_div.text.strip() if name_div else "Предмет не указан"
 
-                    # Тип занятия (по классу)
                     type_div = info_div.find(
                         "div", class_="schcls-item-distype")
                     lesson_type = ""
@@ -224,7 +208,6 @@ async def get_group_week_schedule(
                         else:
                             lesson_type = type_div.text.strip()
 
-                    # Преподаватель
                     teachers = []
                     prepod_div = info_div.find(
                         "div", class_="schcls-item-prepod")
@@ -232,7 +215,6 @@ async def get_group_week_schedule(
                         for link in prepod_div.find_all("a"):
                             teachers.append(link.text.strip())
 
-                    # Группа и подгруппа
                     groups = []
                     subgroup = ""
                     group_div = info_div.find(
@@ -240,7 +222,6 @@ async def get_group_week_schedule(
                     if group_div:
                         for link in group_div.find_all("a"):
                             groups.append(link.text.strip())
-                        # Подгруппа может быть текстом после ссылки
                         group_text = group_div.get_text(
                             separator=' ', strip=True)
                         if "подгруппа" in group_text.lower():
@@ -248,7 +229,6 @@ async def get_group_week_schedule(
                             if len(parts) > 1:
                                 subgroup = "подгруппа " + parts[1].strip()
 
-                    # Аудитория
                     aud_div = card.find("div", class_="schcls-item-aud")
                     lesson_aud = ""
                     if aud_div:

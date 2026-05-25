@@ -43,7 +43,7 @@ async def on_shutdown(bot: Bot, dp: Dispatcher):
     except Exception as e:
         logger.warning(f"Ошибка при закрытии session: {e}")
 
-    logger.info("✅ Ресурсы закрыты")
+    logger.info("Ресурсы закрыты")
 
 
 async def main():
